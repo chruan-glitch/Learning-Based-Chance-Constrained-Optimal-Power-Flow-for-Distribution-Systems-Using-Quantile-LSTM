@@ -1,0 +1,2 @@
+# Learning-Based-Chance-Constrained-Optimal-Power-Flow-for-Distribution-Systems-Using-Quantile-LSTM
+Integrates LSTM-based probabilistic forecasting with chance-constrained optimal power flow (CCOPF) via SOCP. Uses quantile regression LSTM to predict wind/solar prediction intervals and embeds them into a convex DistFlow model. Validated on IEEE 34-bus using NREL data, comparing CCOPF with deterministic &amp; robust OPF.
