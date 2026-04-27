@@ -1,0 +1,43 @@
+# configs/true_ieee34.yaml
+# 真实 IEEE 34-bus 实验参数
+
+network:
+  v_base_kv: 24.9       # 基准电压 (kV)
+  s_base_mva: 1.0       # 基准容量 (MVA)
+  n_buses: 34
+  n_lines: 33
+  slack_bus: 1
+  pv_bus: 20            # 原 Bus 834
+  wind_bus: 9           # 原 Bus 816
+  v_lo: 0.95
+  v_hi: 1.05
+
+renewable:
+  pv_mu: 0.40           # PV 期望出力 (MVA)
+  wind_mu: 0.24         # Wind 期望出力 (MVA)
+  sigma_ratio: 0.25     # sigma = sigma_ratio × mu
+  robust_sigma: 3       # Robust 最坏情况：mu - robust_sigma × sigma
+  power_factor: 0.9     # 可再生能源功率因数
+
+opf:
+  epsilon: 0.05         # CCOPF 违约概率上限
+  max_iter: 5000
+  tol: 1e-6
+
+monte_carlo:
+  n_scenarios: 500
+  n_hours: 24
+  k_volt: 0.50          # true IEEE34 阻抗更高，跌落更大
+  cap_margin: 1.05
+  seed: 42
+
+training:
+  epochs: 50
+  batch_size: 256
+  lr: 5.0e-4
+  weight_decay: 1.0e-5
+  t_max: 150
+  eta_min: 1.0e-5
+  hidden_size: 128
+  window_size: 24
+  quantiles: [0.10, 0.50, 0.90]

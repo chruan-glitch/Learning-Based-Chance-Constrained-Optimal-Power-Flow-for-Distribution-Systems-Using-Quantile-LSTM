@@ -1,0 +1,26 @@
+# Deep learning
+torch>=2.0.0
+torchvision>=0.15.0
+
+# Data & ML
+numpy>=1.24.0
+pandas>=2.0.0
+scikit-learn>=1.3.0
+scipy>=1.11.0
+
+# Optimisation
+pyomo>=6.6.0
+# IPOPT solver — install separately:
+#   conda install -c conda-forge ipopt -y   (recommended)
+#   apt-get install coinor-libipopt-dev      (Linux/Colab fallback)
+
+# Visualisation
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# Config
+pyyaml>=6.0
+
+# Notebooks (optional)
+jupyter>=1.0.0
+ipykernel>=6.0.0

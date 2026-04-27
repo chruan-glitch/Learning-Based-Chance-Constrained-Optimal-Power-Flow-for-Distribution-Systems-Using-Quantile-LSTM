@@ -1,0 +1,43 @@
+# configs/simple_ieee34.yaml
+# 简化 IEEE 34-bus 实验参数
+
+network:
+  n_buses: 34
+  r_uniform: 0.01       # 统一线路电阻 (pu)
+  x_uniform: 0.02       # 统一线路电抗 (pu)
+  p_load_per_bus: 0.05  # 每节点有功负荷 (MW)
+  q_load_per_bus: 0.02  # 每节点无功负荷 (MVAR)
+  slack_bus: 1
+  pv_bus: 34
+  wind_bus: 20
+
+renewable:
+  pv_mu: 0.714          # PV 期望出力 (MW)
+  wind_mu: 0.476        # Wind 期望出力 (MW)
+  sigma_ratio: 0.25     # sigma = sigma_ratio × mu
+  robust_sigma: 2       # Robust 最坏情况：mu - robust_sigma × sigma
+  v_lo: 0.95
+  v_hi: 1.05
+
+opf:
+  epsilon: 0.05         # CCOPF 违约概率上限
+  max_iter: 3000
+  tol: 1e-6
+
+monte_carlo:
+  n_scenarios: 500
+  n_hours: 24
+  k_volt: 0.35          # 每 MW 缺口对应电压跌落 (pu/MW)
+  cap_margin: 1.05      # 合同上限 = p_slack × cap_margin
+  seed: 42
+
+training:
+  epochs: 50
+  batch_size: 256
+  lr: 5.0e-4
+  weight_decay: 1.0e-5
+  t_max: 150
+  eta_min: 1.0e-5
+  hidden_size: 128
+  window_size: 24
+  quantiles: [0.10, 0.50, 0.90]
