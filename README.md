@@ -8,23 +8,30 @@
 
 ## Results Preview
 
-### 1. QR-LSTM Quantile Forecasting
+### 1. Monte Carlo Voltage Distribution & Supply Gap Rate
 
-![Quantile Forecast](results/figures/quantile_predictions.png)
+![Voltage Distribution](results/figures/output01.png)
 
-**Figure 1 — QR-LSTM Probabilistic Forecast (150 epochs, q10/q50/q90)**
-Solar (PV, top) and Wind (bottom) power forecasts over ~200 test hours. The shaded band represents the 80% prediction interval [q10, q90]; the solid line is the median forecast (q50); and the dashed line is actual output. Solar interval coverage reaches **79.5%** (≈ the 80% design target), while Wind achieves **95.0%**, indicating conservatively wide uncertainty bounds that safely bracket real wind variability.
+**Figure 1 — Monte Carlo Validation: Voltage PDF & Gap Rate (500 scenarios × 24 h)**
+
+**Left — Voltage PDF (≥ 0.93 p.u.):** Across all 12,000 scenario-hours, Deterministic (blue) spreads widely with a long left tail reaching below 0.95 p.u. — unsafe operating conditions. CCOPF (green) and Robust (red) concentrate sharply near 0.98–1.00 p.u., staying well within the safe zone [0.95, 1.05] p.u.
+
+**Right — Avg Supply Gap Rate (log scale):** The fraction of hours where actual demand exceeds the planned supply cap:
+- **Deterministic: 45.16%** — nearly half of all hours see shortfalls.
+- **CCOPF: 0.52%** — well below the 5% design target (dashed line), meeting real-world reliability standards.
+- **Robust: 0.08%** — near-zero shortfalls; extremely conservative.
 
 ---
 
 ### 2. OPF Planning Stage Comparison
 
-![OPF Mode Comparison](results/figures/opf_cost.png)
+![OPF Mode Comparison](results/figures/output02.png)
 
 **Figure 2 — Planning-Stage OPF Comparison: Deterministic vs. CCOPF vs. Robust**
+
 Four sub-panels summarise the single-scenario (baseline) OPF solve:
 - **Top-left (Planning Cost):** Deterministic costs only **$26**, CCOPF **$100**, Robust **$122** — a direct consequence of how much renewable output each strategy "trusts."
-- **Top-right (Node Voltage Profile):** Deterministic voltages dip below the 0.95 p.u. lower limit at mid-network buses (buses 10–16), while CCOPF and Robust stay safely within the [0.95, 1.05] p.u. band throughout.
+- **Top-right (Node Voltage Profile):** Deterministic voltages dip below the 0.95 p.u. lower limit at mid-network buses (10–16), while CCOPF and Robust stay safely within the [0.95, 1.05] p.u. band throughout.
 - **Bottom-left (Slack Bus Power):** Robust purchases **1.105 MW** from the grid (worst-case hedge), CCOPF **0.999 MW**, and Deterministic only **0.510 MW** (optimistic, under-buys).
 - **Bottom-right (Solver Time):** All three modes solve in under **0.30 s**; CCOPF is fastest at **0.09 s**, Robust **0.10 s**, Deterministic **0.26 s**.
 
@@ -36,16 +43,16 @@ Four sub-panels summarise the single-scenario (baseline) OPF solve:
 <tr>
 <td width="50%">
 
-![Epsilon Tradeoff](results/figures/epsilon_tradeoff.png)
+![Epsilon Tradeoff](results/figures/output03.png)
 
 </td>
 <td width="50%">
 
 **Figure 3 — Operational Cost vs. Risk Level ε**
 
-The left panel shows the **cost-risk curve** as ε is swept from 0.01 to 0.40. At ε → 0 (near-zero tolerated shortfall probability), the CCOPF cost (~$205) far exceeds the Robust baseline ($122), because the chance constraint tightens past the worst-case bound. As ε grows, cost falls steeply, crossing the Robust line (~ε = 0.03) and approaching Deterministic at high ε.
+The left panel shows the **cost-risk curve** as ε is swept from 0.01 to 0.40. At ε → 0 (near-zero tolerated shortfall probability), CCOPF cost (~$205) far exceeds the Robust baseline ($122), because the chance constraint tightens past the worst-case bound. As ε grows, cost falls steeply, crossing the Robust line (~ε = 0.03) and approaching Deterministic at high ε.
 
-The right panel reveals the **mechanism**: trusted renewable output (orange) rises from ~0.40 MW at ε = 0.01 to ~1.15 MW at ε = 0.40, converging toward the Deterministic mean (blue dashed, 1.190 MW) and away from the Robust lower bound (red dash-dot, 0.595 MW). CCOPF at ε = 0.05 strikes a practical balance: cost ≈ $100 with gap rate ≈ 0.52%.
+The right panel reveals the **mechanism**: trusted renewable output (orange) rises from ~0.40 MW at ε = 0.01 to ~1.15 MW at ε = 0.40, converging toward the Deterministic mean (blue dashed, 1.190 MW) and away from the Robust lower bound (red dash-dot, 0.595 MW). **CCOPF at ε = 0.05** strikes a practical balance: cost ≈ $100 with gap rate ≈ 0.52%.
 
 </td>
 </tr>
@@ -53,25 +60,25 @@ The right panel reveals the **mechanism**: trusted renewable output (orange) ris
 
 ---
 
-### 4. Monte Carlo Voltage Distribution & Supply Gap Rate
+### 4. QR-LSTM Quantile Forecasting
 
 <table>
 <tr>
 <td width="50%">
 
-![Voltage PDF](results/figures/voltage_pdf.png)
+![Quantile Forecast](results/figures/output04.png)
 
 </td>
 <td width="50%">
 
-**Figure 4 — Monte Carlo Validation: Voltage PDF & Gap Rate (500 scenarios × 24 h)**
+**Figure 4 — QR-LSTM Probabilistic Forecast (150 epochs, q10/q50/q90)**
 
-**Left — Voltage PDF (≥ 0.93 p.u.):** Across all 12,000 scenario-hours, Deterministic (blue) spreads widely, with a long left tail reaching below 0.95 p.u. — unsafe operating conditions. CCOPF (green) and Robust (red) concentrate sharply near 0.98–1.00 p.u., staying well within the safe zone [0.95, 1.05] p.u.
+Solar (PV, top) and Wind (bottom) power forecasts over ~200 test hours. The shaded band is the 80% prediction interval [q10, q90]; the solid line is the median forecast (q50); the dashed line is actual output.
 
-**Right — Avg Supply Gap Rate (log scale):** The fraction of hours where actual demand exceeds the planned supply cap:
-- **Deterministic: 45.16%** — nearly half of all hours see shortfalls.
-- **CCOPF: 0.52%** — just above the 5% design target (dashed line), meeting real-world reliability standards.
-- **Robust: 0.08%** — near-zero shortfalls; extremely conservative.
+- **Solar coverage: 79.5%** — closely matches the 80% design target, confirming well-calibrated uncertainty bounds for PV.
+- **Wind coverage: 95.0%** — conservatively wide intervals safely bracket real wind variability, at the cost of slightly over-estimating uncertainty.
+
+The LSTM captures the diurnal on/off pattern of solar and the irregular peaks of wind, with quantile intervals that widen appropriately during high-output periods.
 
 </td>
 </tr>
@@ -85,16 +92,16 @@ The right panel reveals the **mechanism**: trusted renewable output (orange) ris
 <tr>
 <td width="50%">
 
-![Cost-Reliability Tradeoff](results/figures/tradeoff.png)
+![Cost-Reliability Tradeoff](results/figures/output05.png)
 
 </td>
 <td width="50%">
 
 **Figure 5 — Cost–Reliability Trade-off: Deterministic vs. CCOPF vs. Robust**
 
-**Left (Panel A):** Side-by-side comparison of planning cost (solid bars) and average gap rate (hatched bars, right axis, log scale). Deterministic is the cheapest ($26) but exposes the system to a 45.16% shortfall rate. CCOPF ($100) reduces the gap rate by 87× to 0.52%. Robust ($122) nearly eliminates shortfalls (0.08%) but at the highest cost.
+**Left (Panel A):** Side-by-side comparison of planning cost (solid bars) and average gap rate (hatched bars, right axis, log scale). Deterministic is cheapest ($26) but incurs a 45.16% shortfall rate. CCOPF ($100) reduces the gap rate by ~87× to 0.52%. Robust ($122) nearly eliminates shortfalls (0.08%) but at the highest cost.
 
-**Right (Panel B — Economy–Reliability Frontier):** A Pareto scatter on log-scale gap rate vs. planning cost. CCOPF (green) sits in the near-ideal zone — to the left of the 5% ε target (dashed vertical line) and far below Robust's cost. Deterministic (blue) is cheapest but lies far to the right (unsafe). Robust (red) is safest but most expensive. **CCOPF dominates on the cost-reliability trade-off for practical distribution network operation.**
+**Right (Panel B — Economy–Reliability Frontier):** A Pareto scatter on log-scale gap rate vs. planning cost. CCOPF (green) sits in the near-ideal zone — left of the 5% ε target (dashed line) and well below Robust's cost. Deterministic (blue) is cheapest but lies far right (unsafe). Robust (red) is safest but most expensive. **CCOPF dominates on the cost-reliability trade-off for practical distribution network operation.**
 
 </td>
 </tr>
